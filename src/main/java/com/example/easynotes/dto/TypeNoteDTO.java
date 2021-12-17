@@ -1,11 +1,18 @@
 package com.example.easynotes.dto;
 
 import com.example.easynotes.model.Note;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 import java.io.Serializable;
 
+@Getter
+@AllArgsConstructor
 public class TypeNoteDTO implements Serializable {
     private Note.TypeNote type;
+
+    public TypeNoteDTO() {}
 
     @Override
     public String toString() {

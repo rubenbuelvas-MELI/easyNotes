@@ -1,6 +1,7 @@
 package com.example.easynotes.integration;
 
 import com.example.easynotes.dto.NoteResponseWithCantLikesDTO;
+import com.example.easynotes.dto.TypeNoteDTO;
 import com.example.easynotes.model.Note;
 import com.example.easynotes.service.NoteService;
 import com.example.easynotes.service.UserService;
@@ -80,5 +81,60 @@ public class NotesIntegrationTest {
                         content().json(expected),
                         content().contentType(MediaType.APPLICATION_JSON)
                 );
+    }
+
+    @Test
+    public void lessThanFiveThanksShouldBeNoteTypeNormal() throws Exception {
+        Long noteId = 14L;
+        TypeNoteDTO expectedType = new TypeNoteDTO(Note.TypeNote.Normal);
+
+        String expected = writer.writeValueAsString(expectedType);
+
+        mockMvc.perform( get(String.format("/api/note/%d/getNoteType", noteId)) )
+                .andDo(print()).andExpectAll(
+                        status().isOk(),
+                        content().json(expected),
+                        content().contentType(MediaType.APPLICATION_JSON)
+                );
+    }
+
+    @Test
+    public void betweenFiveAndTenThanksShouldBeNoteTypeOfInterest() throws Exception {
+        Long noteId = 29L;
+        TypeNoteDTO expectedType = new TypeNoteDTO(Note.TypeNote.OfInterest);
+
+        String expected = writer.writeValueAsString(expectedType);
+
+        mockMvc.perform( get(String.format("/api/note/%d/getNoteType", noteId)) )
+                .andDo(print()).andExpectAll(
+                status().isOk(),
+                content().json(expected),
+                content().contentType(MediaType.APPLICATION_JSON)
+        );
+    }
+
+    @Test
+    public void moreThanTenThanksShouldBeNoteTypeHighlight() throws Exception {
+        Long noteId = 999L;
+        TypeNoteDTO expectedType = new TypeNoteDTO(Note.TypeNote.Highlight);
+
+        String expected = writer.writeValueAsString(expectedType);
+
+        mockMvc.perform( get(String.format("/api/note/%d/getNoteType", noteId)) )
+                .andDo(print()).andExpectAll(
+                status().isOk(),
+                content().json(expected),
+                content().contentType(MediaType.APPLICATION_JSON)
+        );
+    }
+
+    @Test
+    public void invalidNoteIdThrowsResourceNotFoundException() throws Exception {
+        Long invalidNoteId = 1000L;
+
+        mockMvc.perform( get(String.format("/api/note/%d/getNoteType", invalidNoteId)) )
+                .andDo(print()).andExpectAll(
+                status().isBadRequest()
+        );
     }
 }

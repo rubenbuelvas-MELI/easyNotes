@@ -64,6 +64,6 @@ public class NoteController {
 
     @GetMapping("{id}/getNoteType")
     public ResponseEntity<TypeNoteDTO> getTypeNote(@PathVariable(value = "id") Long id) {
-        return new ResponseEntity(noteService.getTypeNote(id).toString(), HttpStatus.OK);
+        return new ResponseEntity(noteService.getTypeNote(id), HttpStatus.OK);
     }
 }
