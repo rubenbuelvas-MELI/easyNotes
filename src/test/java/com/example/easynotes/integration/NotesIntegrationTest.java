@@ -2,6 +2,7 @@ package com.example.easynotes.integration;
 
 import com.example.easynotes.dto.NoteResponseWithAuthorDTO;
 import com.example.easynotes.dto.NoteResponseWithCantLikesDTO;
+import com.example.easynotes.dto.ThankDTO;
 import com.example.easynotes.dto.TypeNoteDTO;
 import com.example.easynotes.dto.UserResponseDTO;
 import com.example.easynotes.model.Note;
@@ -35,6 +36,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
@@ -63,6 +65,7 @@ public class NotesIntegrationTest {
                 .registerModule(new JSR310Module())
                 .writer()
                 .withDefaultPrettyPrinter();
+
         mapper = new ObjectMapper().configure(SerializationFeature.WRAP_ROOT_VALUE, false);
     }
 
@@ -157,16 +160,16 @@ public class NotesIntegrationTest {
     public void getAllNotesShouldGetAllNotes() throws Exception {
         Integer expectedSize = 7;
         List<String> expectedList = new ArrayList<>();
-        List<Long> noteIds = List.of(1L,1L,1L,1L,1L,1L,12L);
-        for(Long i : noteIds) {
+        List<Long> noteIds = List.of(1L, 1L, 1L, 1L, 1L, 1L, 12L);
+        for (Long i : noteIds) {
             expectedList.add(this.writer.
                     writeValueAsString(new NoteResponseWithAuthorDTO(new UserResponseDTO(i))));
         }
 
-        MvcResult result = mockMvc.perform( get("/api/note/all") )
+        MvcResult result = mockMvc.perform(get("/api/note/all"))
                 .andDo(print()).andExpectAll(
-                status().isOk(), content().contentType(MediaType.APPLICATION_JSON)
-        ).andReturn();
+                        status().isOk(), content().contentType(MediaType.APPLICATION_JSON)
+                ).andReturn();
 
         List<String> obtainedList = this.mapper.readValue(
                 result.getResponse().getContentAsString(), List.class);
@@ -175,5 +178,45 @@ public class NotesIntegrationTest {
         for(String note : expectedList) {
             Assertions.assertTrue(obtainedList.contains(note));
         }*/
+    }
+
+    public void getThanksFromValidNoteId() throws Exception{
+        Long noteId = 0L;
+        Integer exceptedThanksQuantity = 7;
+
+        MvcResult result = this.mockMvc.perform(
+                        MockMvcRequestBuilders.get(String.format("/api/note/%d/thank", noteId)) )
+                .andDo(print()).andExpect(status().isOk())
+                .andReturn();
+
+        // Deserializo la respuesta
+        Set<?> thankDTOSet = mapper.readValue(result.getResponse().getContentAsString(), Set.class);
+        // Me fijo que tenga dos seguidos
+        Assertions.assertEquals(exceptedThanksQuantity, thankDTOSet.size());
+    }
+
+   @Test
+    public void getThanksFromInvalidNoteIdThrowsResourceNotFoundException() throws Exception{
+        Long noteId = 1000L;
+
+        this.mockMvc.perform(
+                        MockMvcRequestBuilders.get(String.format("/api/note/%d/thank", noteId)) )
+                .andDo(print()).andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void deleteCorrectIdString() throws Exception{
+        Long noteId = 9999L;
+
+        // Borro la nota indicada
+        this.mockMvc.perform(
+                        MockMvcRequestBuilders.delete(String.format("/api/note/%d", noteId)) )
+                .andDo(print()).andExpect(status().isOk());
+
+        // Verifico que me tire la excepcion por no encontrada al buscarla nuevamente
+        this.mockMvc.perform(
+                        MockMvcRequestBuilders.get(String.format("/api/note/%d", noteId)) )
+                .andDo(print()).andExpect(status().isBadRequest());
+
     }
 }

@@ -24,7 +24,8 @@ VALUES
     (29,'Si el tiempo no se me pasa más cuando se corta la luz4','2020-12-06','Que hacemos4?','2021-12-06',1),
     (30,'Si el tiempo no se me pasa más cuando se corta la luz4','2020-12-06','Que hacemos4?','2021-12-06',1),
     (37,'Si el tiempo no se me pasa más cuando se corta la luz5','2021-12-06','Que hacemos5?','2021-12-06',1),
-    (999,'No pasa el tiempo','2021-12-17','Dark','2021-12-17',12);
+    (999,'No pasa el tiempo','2021-12-17','Dark','2021-12-17',12),
+    (9999,'Pasa el tiempo','2021-12-17','No soy Dark','2021-12-17',12);
 
 
 INSERT INTO `thank`
