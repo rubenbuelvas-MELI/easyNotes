@@ -1,6 +1,7 @@
 package com.example.easynotes.integration;
 
 import com.example.easynotes.dto.NoteResponseWithCantLikesDTO;
+import com.example.easynotes.dto.ThankDTO;
 import com.example.easynotes.dto.TypeNoteDTO;
 import com.example.easynotes.model.Note;
 import com.example.easynotes.service.NoteService;
@@ -9,6 +10,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JSR310Module;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -20,6 +22,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultMatcher;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -30,6 +33,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
@@ -40,6 +44,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class NotesIntegrationTest {
 
     private static ObjectWriter writer;
+    private static ObjectMapper mapper;
 
     @Autowired
     MockMvc mockMvc;
@@ -57,6 +62,9 @@ public class NotesIntegrationTest {
                 .registerModule(new JSR310Module())
                 .writer()
                 .withDefaultPrettyPrinter();
+
+        mapper = new ObjectMapper()
+                .configure(SerializationFeature.WRAP_ROOT_VALUE, false);
     }
 
     @Test
@@ -136,5 +144,46 @@ public class NotesIntegrationTest {
                 .andDo(print()).andExpectAll(
                 status().isBadRequest()
         );
+    }
+
+    @Test
+    public void getThanksFromValidNoteId() throws Exception{
+        Long noteId = 0L;
+        Integer exceptedThanksQuantity = 7;
+
+        MvcResult result = this.mockMvc.perform(
+                        MockMvcRequestBuilders.get(String.format("/api/note/%d/thank", noteId)) )
+                .andDo(print()).andExpect(status().isOk())
+                .andReturn();
+
+        // Deserializo la respuesta
+        Set<?> thankDTOSet = mapper.readValue(result.getResponse().getContentAsString(), Set.class);
+        // Me fijo que tenga dos seguidos
+        Assertions.assertEquals(exceptedThanksQuantity, thankDTOSet.size());
+    }
+
+   @Test
+    public void getThanksFromInvalidNoteIdThrowsResourceNotFoundException() throws Exception{
+        Long noteId = 1000L;
+
+        this.mockMvc.perform(
+                        MockMvcRequestBuilders.get(String.format("/api/note/%d/thank", noteId)) )
+                .andDo(print()).andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void deleteCorrectIdString() throws Exception{
+        Long noteId = 9999L;
+
+        // Borro la nota indicada
+        this.mockMvc.perform(
+                        MockMvcRequestBuilders.delete(String.format("/api/note/%d", noteId)) )
+                .andDo(print()).andExpect(status().isOk());
+
+        // Verifico que me tire la excepcion por no encontrada al buscarla nuevamente
+        this.mockMvc.perform(
+                        MockMvcRequestBuilders.get(String.format("/api/note/%d", noteId)) )
+                .andDo(print()).andExpect(status().isBadRequest());
+
     }
 }
