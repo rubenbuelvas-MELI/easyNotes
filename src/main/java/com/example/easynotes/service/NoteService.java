@@ -159,6 +159,19 @@ public class NoteService implements INoteService {
                 )
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public TypeNoteDTO getTypeNote(Long id) {
+        Note note = noteRepository.findById(id)
+                .orElseThrow( () -> new ResourceNotFoundException("Note", "id", id) );
+        Integer countThanks = note.getThanks().size();
+        TypeNoteDTO outDTO = new TypeNoteDTO();
+        if (countThanks < 5) outDTO.setType(Note.TypeNote.Normal);
+        else if (countThanks < 11) outDTO.setType(Note.TypeNote.OfInterest);
+        else outDTO.setType(Note.TypeNote.Highlight);
+
+        return outDTO;
+    }
 }
 
 
