@@ -8,6 +8,7 @@ import com.example.easynotes.dto.UserResponseDTO;
 import com.example.easynotes.model.Note;
 import com.example.easynotes.service.NoteService;
 import com.example.easynotes.service.UserService;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -35,8 +36,10 @@ import org.springframework.util.Assert;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
@@ -158,26 +161,22 @@ public class NotesIntegrationTest {
 
     @Test
     public void getAllNotesShouldGetAllNotes() throws Exception {
-        Integer expectedSize = 7;
-        List<String> expectedList = new ArrayList<>();
-        List<Long> noteIds = List.of(1L, 1L, 1L, 1L, 1L, 1L, 12L);
-        for (Long i : noteIds) {
-            expectedList.add(this.writer.
-                    writeValueAsString(new NoteResponseWithAuthorDTO(new UserResponseDTO(i))));
-        }
+        Integer expectedSize = 8;
+        List<Integer> noteIds = List.of(0,1,14,29,30,37,999,9999);
 
         MvcResult result = mockMvc.perform(get("/api/note/all"))
                 .andDo(print()).andExpectAll(
                         status().isOk(), content().contentType(MediaType.APPLICATION_JSON)
                 ).andReturn();
 
-        List<String> obtainedList = this.mapper.readValue(
+        List<LinkedHashMap> obtainedList = this.mapper.readValue(
                 result.getResponse().getContentAsString(), List.class);
 
-        /*Assertions.assertEquals(expectedSize, obtainedList.size());
-        for(String note : expectedList) {
-            Assertions.assertTrue(obtainedList.contains(note));
-        }*/
+        Assertions.assertEquals(expectedSize, obtainedList.size());
+        for(Integer note : noteIds) {
+            Assertions.assertTrue(obtainedList.stream()
+                    .anyMatch(n -> ((Integer) n.get("id")).equals(note)));
+        }
     }
 
     public void getThanksFromValidNoteId() throws Exception{
