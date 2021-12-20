@@ -8,11 +8,7 @@ VALUES
     (5, 'user5','last5'),
     (6, 'user6','last6'),
     (7, 'user7','last7'),
-    (8, 'user8','last8'),
-    (9, 'Juan','Smith'),
-    (10, 'Alfonso','Perez'),
-    (11, 'Juani','Suarez'),
-    (12, 'Diego','Maradona');
+    (8, 'user8','last8');
 
 
 INSERT INTO `note`
@@ -35,8 +31,7 @@ VALUES
     (6,'Si el tiempo no se me pasa más cuando se corta la luz4','2020-12-19','Que hacemos4?','2021-12-19',3),
     (7,'Si el tiempo no se me pasa más cuando se corta la luz4','2020-12-16','Que hacemos4?','2021-12-16',3),
     (8,'Si el tiempo no se me pasa más cuando se corta la luz4','2020-12-10','Que hacemos4?','2021-12-10',3),
-    (9,'Si el tiempo no se me pasa más cuando se corta la luz5','2020-12-03','Que hacemos5?','2021-12-03',3),
-    (999,'No pasa el tiempo','2021-12-17','Dark','2021-12-17',12);
+    (9,'Si el tiempo no se me pasa más cuando se corta la luz5','2020-12-03','Que hacemos5?','2021-12-03',3);
 
 
 INSERT INTO `thank`
@@ -82,17 +77,5 @@ VALUES
     (37,4,'2021-12-06'),
     (37,5,'2021-12-06'),
     (37,6,'2021-12-06'),
-    (37,7,'2021-12-06'),
-
-    (999,1,'2021-12-17'),
-    (999,2,'2021-12-17'),
-    (999,3,'2021-12-17'),
-    (999,4,'2021-12-17'),
-    (999,5,'2021-12-17'),
-    (999,6,'2021-12-17'),
-    (999,7,'2021-12-17'),
-    (999,8,'2021-12-17'),
-    (999,9,'2021-12-17'),
-    (999,10,'2021-12-17'),
-    (999,11,'2021-12-17');
+    (37,7,'2021-12-06');
 

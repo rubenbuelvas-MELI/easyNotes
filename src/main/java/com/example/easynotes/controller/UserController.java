@@ -3,6 +3,7 @@ package com.example.easynotes.controller;
 import com.example.easynotes.dto.*;
 import com.example.easynotes.service.IUserService;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -87,6 +88,16 @@ public class UserController {
     public ResponseEntity<?> deleteUser(@PathVariable(value = "id") Long userId) {
         userService.deleteUser(userId);
         return ResponseEntity.ok().build();
+    }
+
+
+
+    @GetMapping("/{id}/type")
+    public ResponseEntity<UserTypeDTO> getUserType(@PathVariable(value = "id") Long userId) {
+        return new ResponseEntity<>(
+                userService.getUserType(userId),
+                HttpStatus.OK
+        );
     }
 
 
