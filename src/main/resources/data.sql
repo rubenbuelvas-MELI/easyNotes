@@ -17,20 +17,21 @@ VALUES
 (0,'Si el tiempo no se me pasa más cuando se corta la luz1','2019-12-06','Que hacemos1?','2021-12-06',1),
 (1,'Si el tiempo no se me pasa más cuando se corta la luz2','2020-12-06','Que hacemos2?','2021-12-06',1),
 (14,'Si el tiempo no se me pasa más cuando se corta la luz3','2020-12-06','Que hacemos3?','2021-12-06',1),
-(29,'Si el tiempo no se me pasa más cuando se corta la luz4','2020-12-06','Que hacemos4?','2021-12-06',1),
-(30,'Si el tiempo no se me pasa más cuando se corta la luz4','2020-12-06','Que hacemos4?','2021-12-06',1),
-(37,'Si el tiempo no se me pasa más cuando se corta la luz5','2021-12-06','Que hacemos5?','2021-12-06',1),
+(29,'Si el tiempo no se me pasa más cuando se corta la luz4',CAST(NOW() - INTERVAL 1 DAY AS DATE),'Que hacemos4?','2021-12-06',1),
+(30,'Si el tiempo no se me pasa más cuando se corta la luz4',CAST(NOW() - INTERVAL 2 DAY AS DATE),'Que hacemos4?','2021-12-06',1),
+(37,'Si el tiempo no se me pasa más cuando se corta la luz5',CAST(NOW() - INTERVAL 3 DAY AS DATE),'Que hacemos5?','2021-12-06',1),
+(38,'Si el tiempo no se me pasa más cuando se corta la luz5',CAST(NOW() AS DATE),'Que hacemos5?','2021-12-06',1),
 
 
-(2,'Si el tiempo no se me pasa más cuando se corta la luz4','2021-12-20','Que hacemos4?','2021-12-20',2),
-(3,'Si el tiempo no se me pasa más cuando se corta la luz4','2021-12-19','Que hacemos4?','2021-12-19',2),
-(4,'Si el tiempo no se me pasa más cuando se corta la luz5','2021-12-18','Que hacemos5?','2021-12-18',2),
-(5,'Si el tiempo no se me pasa más cuando se corta la luz4','2021-12-17','Que hacemos4?','2021-12-17',2),
+(2,'Si el tiempo no se me pasa más cuando se corta la luz4','2020-12-20','Que hacemos4?','2021-12-20',2),
+(4,'Si el tiempo no se me pasa más cuando se corta la luz4',CAST(NOW() - INTERVAL 1 DAY AS DATE),'Que hacemos4?','2021-12-06',2),
+(5,'Si el tiempo no se me pasa más cuando se corta la luz4',CAST(NOW() - INTERVAL 9 DAY AS DATE),'Que hacemos4?','2021-12-06',2),
+(50,'Si el tiempo no se me pasa más cuando se corta la luz5',CAST(NOW() - INTERVAL 16 DAY AS DATE),'Que hacemos5?','2021-12-06',2),
 
-(6,'Si el tiempo no se me pasa más cuando se corta la luz4','2021-12-19','Que hacemos4?','2021-12-19',3),
-(7,'Si el tiempo no se me pasa más cuando se corta la luz4','2021-12-16','Que hacemos4?','2021-12-16',3),
-(8,'Si el tiempo no se me pasa más cuando se corta la luz4','2021-12-10','Que hacemos4?','2021-12-10',3),
-(9,'Si el tiempo no se me pasa más cuando se corta la luz5','2021-12-03','Que hacemos5?','2021-12-03',3);
+(6,'Si el tiempo no se me pasa más cuando se corta la luz4','2020-12-19','Que hacemos4?','2021-12-19',3),
+(7,'Si el tiempo no se me pasa más cuando se corta la luz4','2020-12-16','Que hacemos4?','2021-12-16',3),
+(8,'Si el tiempo no se me pasa más cuando se corta la luz4','2020-12-10','Que hacemos4?','2021-12-10',3),
+(9,'Si el tiempo no se me pasa más cuando se corta la luz5','2020-12-03','Que hacemos5?','2021-12-03',3);
 
 
 INSERT INTO `thank`
