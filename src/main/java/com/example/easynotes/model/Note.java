@@ -16,7 +16,7 @@ import java.util.Set;
 @Entity
 @Table(name = "note")
 public class Note {
-    enum TypeNote {Highlight, OfInterest, Normal};
+    public enum TypeNote {Highlight, OfInterest, Normal};
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
