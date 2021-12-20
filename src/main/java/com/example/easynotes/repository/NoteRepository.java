@@ -27,6 +27,9 @@ public interface NoteRepository extends JpaRepository<Note, Long> {
             "group by note.id order by cant_thanks desc")
     List<HashMap<String, Object>> findTopThreeNotesMostThankedByDate(int year);
 
+
+    List<Note> findNoteByAuthor_id(Long id);
+
     List<Note> findNoteByAuthor_idAndCreatedAtBetween(Long id, LocalDate start, LocalDate finish);
 
     List<Note> findNoteByAuthor_idAndCreatedAt(Long id, LocalDate date);
