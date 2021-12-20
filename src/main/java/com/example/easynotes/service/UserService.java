@@ -18,6 +18,8 @@ import org.springframework.stereotype.Service;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -166,6 +168,48 @@ public class UserService implements IUserService {
         Thank thank = new Thank(user, note);
 
         thankRepository.save(thank);
+    }
+
+    private boolean checkIfDailyPublisher(Long id, int days) {
+        LocalDate now = LocalDate.now();
+        for (int i=1; i<days+1; i++) {
+            LocalDate date = now.minusDays(i);
+            if (noteRepository.findNoteByAuthor_idAndCreatedAt(id, date).size() == 0) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private boolean checkIfPublishedBetween(Long id, LocalDate start, LocalDate finish) {
+        List<Note> notes = noteRepository.findNoteByAuthor_idAndCreatedAtBetween(id, start, finish);
+        return notes.size() > 0;
+    }
+
+    private boolean checkIfWeeklyPublisher(Long id, int weeks) {
+        LocalDate now = LocalDate.now();
+        for (int i=0; i<weeks; i++) {
+            LocalDate start = now.minusWeeks(i+1);
+            LocalDate finish = now.minusWeeks(i);
+            if (!checkIfPublishedBetween(id, start, finish)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    @Override
+    public UserTypeDTO getUserType(Long id) {
+        User user = userRepository.getById(id);
+        UserTypeDTO userTypeDTO = modelMapper.map(user, UserTypeDTO.class);
+        if (checkIfDailyPublisher(id, 3)) {
+            userTypeDTO.setType(UserTypeDTO.userTypes.PublicadorDiario);
+        } else if (checkIfWeeklyPublisher(id, 3)) {
+            userTypeDTO.setType(UserTypeDTO.userTypes.PublicadorSemanal);
+        } else {
+            userTypeDTO.setType(UserTypeDTO.userTypes.Publicador);
+        }
+        return userTypeDTO;
     }
 
 //    @Override

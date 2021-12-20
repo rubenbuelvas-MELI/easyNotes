@@ -1,12 +1,14 @@
 package com.example.easynotes.repository;
 
 import com.example.easynotes.model.Note;
+import com.example.easynotes.model.Thank;
 import com.example.easynotes.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -43,9 +45,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
             "join user.authorNotes note " +
             "where note.createdAt >= :date" )
     List<User> findUserByNoteCreatedAtLessOrEqualDate(@Param("date") Date date);
-
-
-
 
 
 

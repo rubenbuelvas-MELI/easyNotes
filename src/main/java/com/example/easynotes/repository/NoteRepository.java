@@ -5,6 +5,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
@@ -24,6 +26,14 @@ public interface NoteRepository extends JpaRepository<Note, Long> {
             "where YEAR(thank.createdAt) = :year " +
             "group by note.id order by cant_thanks desc")
     List<HashMap<String, Object>> findTopThreeNotesMostThankedByDate(int year);
+
+
+    List<Note> findNoteByAuthor_id(Long id);
+
+    List<Note> findNoteByAuthor_idAndCreatedAtBetween(Long id, LocalDate start, LocalDate finish);
+
+    List<Note> findNoteByAuthor_idAndCreatedAt(Long id, LocalDate date);
+
 }
 /*
 note    thank
